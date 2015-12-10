@@ -76,6 +76,15 @@ class ChangePasswordController extends Controller
             return $response;
         }
 
+        if ($form->isSubmitted()) {
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_FAILURE, $event);
+
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
+        }
+
         return $this->render('FOSUserBundle:ChangePassword:changePassword.html.twig', array(
             'form' => $form->createView()
         ));

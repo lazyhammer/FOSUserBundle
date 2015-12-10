@@ -90,6 +90,15 @@ class ProfileController extends Controller
             return $response;
         }
 
+        if ($form->isSubmitted()) {
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_FAILURE, $event);
+
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
+        }
+
         return $this->render('FOSUserBundle:Profile:edit.html.twig', array(
             'form' => $form->createView()
         ));

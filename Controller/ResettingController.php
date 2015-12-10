@@ -135,6 +135,15 @@ class ResettingController extends Controller
             return $response;
         }
 
+        if ($form->isSubmitted()) {
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_FAILURE, $event);
+
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
+        }
+
         return $this->render('FOSUserBundle:Resetting:reset.html.twig', array(
             'token' => $token,
             'form' => $form->createView(),
