@@ -35,6 +35,16 @@ final class FOSUserEvents
     const CHANGE_PASSWORD_SUCCESS = 'fos_user.change_password.edit.success';
 
     /**
+     * The CHANGE_PASSWORD_FAILURE event occurs when the change password form is not valid.
+     *
+     * This event allows you to set the response instead of using the default one.
+     * The event listener method receives a FOS\UserBundle\Event\FormEvent instance.
+     *
+     * @Event("FOS\UserBundle\Event\FormEvent")
+     */
+    const CHANGE_PASSWORD_FAILURE = 'fos_user.change_password.edit.failure';
+
+    /**
      * The CHANGE_PASSWORD_COMPLETED event occurs after saving the user in the change password process.
      *
      * This event allows you to access the response which will be sent.
@@ -60,6 +70,16 @@ final class FOSUserEvents
      * @Event("FOS\UserBundle\Event\FormEvent")
      */
     const GROUP_CREATE_SUCCESS = 'fos_user.group.create.success';
+
+    /**
+     * The GROUP_CREATE_FAILURE event occurs when the group creation form is not valid.
+     *
+     * This event allows you to set the response instead of using the default one.
+     * The event listener method receives a FOS\UserBundle\Event\FormEvent instance.
+     *
+     * @Event("FOS\UserBundle\Event\FormEvent")
+     */
+    const GROUP_CREATE_FAILURE = 'fos_user.group.create.failure';
 
     /**
      * The GROUP_CREATE_COMPLETED event occurs after saving the group in the group creation process.
@@ -98,6 +118,16 @@ final class FOSUserEvents
     const GROUP_EDIT_SUCCESS = 'fos_user.group.edit.success';
 
     /**
+     * The GROUP_EDIT_FAILURE event occurs when the group edit form is not valid.
+     *
+     * This event allows you to set the response instead of using the default one.
+     * The event listener method receives a FOS\UserBundle\Event\FormEvent instance.
+     *
+     * @Event("FOS\UserBundle\Event\FormEvent")
+     */
+    const GROUP_EDIT_FAILURE = 'fos_user.group.edit.failure';
+
+    /**
      * The GROUP_EDIT_COMPLETED event occurs after saving the group in the group edit process.
      *
      * This event allows you to access the response which will be sent.
@@ -123,6 +153,16 @@ final class FOSUserEvents
      * @Event("FOS\UserBundle\Event\FormEvent")
      */
     const PROFILE_EDIT_SUCCESS = 'fos_user.profile.edit.success';
+
+    /**
+     * The PROFILE_EDIT_FAILURE event occurs when the profile edit form is not valid.
+     *
+     * This event allows you to set the response instead of using the default one.
+     * The event listener method receives a FOS\UserBundle\Event\FormEvent instance.
+     *
+     * @Event("FOS\UserBundle\Event\FormEvent")
+     */
+    const PROFILE_EDIT_FAILURE = 'fos_user.profile.edit.failure';
 
     /**
      * The PROFILE_EDIT_COMPLETED event occurs after saving the user in the profile edit process.
@@ -215,6 +255,16 @@ final class FOSUserEvents
      * @Event("FOS\UserBundle\Event\FormEvent ")
      */
     const RESETTING_RESET_SUCCESS = 'fos_user.resetting.reset.success';
+
+    /**
+     * The RESETTING_RESET_FAILURE event occurs when the resetting form is not valid.
+     *
+     * This event allows you to set the response instead of using the default one.
+     * The event listener method receives a FOS\UserBundle\Event\FormEvent instance.
+     *
+     * @Event("FOS\UserBundle\Event\FormEvent")
+     */
+    const RESETTING_RESET_FAILURE = 'fos_user.resetting.reset.failure';
 
     /**
      * The RESETTING_RESET_COMPLETED event occurs after saving the user in the resetting process.

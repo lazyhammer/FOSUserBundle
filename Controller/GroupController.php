@@ -91,23 +91,32 @@ class GroupController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            /** @var $groupManager \FOS\UserBundle\Model\GroupManagerInterface */
-            $groupManager = $this->get('fos_user.group_manager');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var $groupManager \FOS\UserBundle\Model\GroupManagerInterface */
+                $groupManager = $this->get('fos_user.group_manager');
 
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_SUCCESS, $event);
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_SUCCESS, $event);
 
-            $groupManager->updateGroup($group);
+                $groupManager->updateGroup($group);
 
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_group_show', array('groupName' => $group->getName()));
-                $response = new RedirectResponse($url);
+                if (null === $response = $event->getResponse()) {
+                    $url = $this->generateUrl('fos_user_group_show', array('groupName' => $group->getName()));
+                    $response = new RedirectResponse($url);
+                }
+
+                $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+
+                return $response;
             }
 
-            $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::GROUP_EDIT_FAILURE, $event);
 
-            return $response;
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
         }
 
         return $this->render('@FOSUser/Group/edit.html.twig', array(
@@ -141,20 +150,29 @@ class GroupController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_SUCCESS, $event);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_SUCCESS, $event);
 
-            $groupManager->updateGroup($group);
+                $groupManager->updateGroup($group);
 
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_group_show', array('groupName' => $group->getName()));
-                $response = new RedirectResponse($url);
+                if (null === $response = $event->getResponse()) {
+                    $url = $this->generateUrl('fos_user_group_show', array('groupName' => $group->getName()));
+                    $response = new RedirectResponse($url);
+                }
+
+                $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+
+                return $response;
             }
 
-            $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_COMPLETED, new FilterGroupResponseEvent($group, $request, $response));
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::GROUP_CREATE_FAILURE, $event);
 
-            return $response;
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
         }
 
         return $this->render('@FOSUser/Group/new.html.twig', array(

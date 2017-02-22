@@ -161,23 +161,32 @@ class ResettingController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $event = new FormEvent($form, $request);
-            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_SUCCESS, $event);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_SUCCESS, $event);
 
-            $userManager->updateUser($user);
+                $userManager->updateUser($user);
 
-            if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_profile_show');
-                $response = new RedirectResponse($url);
+                if (null === $response = $event->getResponse()) {
+                    $url = $this->generateUrl('fos_user_profile_show');
+                    $response = new RedirectResponse($url);
+                }
+
+                $dispatcher->dispatch(
+                    FOSUserEvents::RESETTING_RESET_COMPLETED,
+                    new FilterUserResponseEvent($user, $request, $response)
+                );
+
+                return $response;
             }
 
-            $dispatcher->dispatch(
-                FOSUserEvents::RESETTING_RESET_COMPLETED,
-                new FilterUserResponseEvent($user, $request, $response)
-            );
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(FOSUserEvents::RESETTING_RESET_FAILURE, $event);
 
-            return $response;
+            if (null !== $response = $event->getResponse()) {
+                return $response;
+            }
         }
 
         return $this->render('@FOSUser/Resetting/reset.html.twig', array(
